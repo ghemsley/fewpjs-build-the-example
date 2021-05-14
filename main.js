@@ -3,9 +3,32 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
+const likesArray = document.getElementsByClassName('like')
+const errorModal = () => document.getElementById('modal')
 
+const addListenerToLikesArray = () => {
+  for (const like of likesArray) {
+    like.addEventListener('click', (event) => {
+      mimicServerCall()
+        .then((response) => {
+          console.log(response)
+          event.target.classList.toggle('activated-heart')
+          const heart = event.target.firstChild
+          heart.textContent = heart.textContent != FULL_HEART ? FULL_HEART : EMPTY_HEART
+        })
+        .catch((error) => {
+          console.error(error)
+          errorModal().classList.toggle('hidden')
+          errorModal().innerText = error
+          setTimeout(() => {
+            errorModal().classList.toggle('hidden')
+          }, 5000)
+        })
+    })
+  }
+}
 
-
+document.addEventListener('DOMContentLoaded', addListenerToLikesArray)
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
